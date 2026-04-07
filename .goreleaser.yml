@@ -1,0 +1,38 @@
+version: 2
+
+builds:
+  - binary: uxvalidator
+    main: .
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}}
+
+archives:
+  - format: tar.gz
+    name_template: "uxvalidator_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+brews:
+  - repository:
+      owner: whitingdeltix
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    name: uxvalidator
+    homepage: "https://deltix.ai"
+    description: "CLI for UX Validator — automated UX quality validation"
+    install: |
+      bin.install "uxvalidator"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
